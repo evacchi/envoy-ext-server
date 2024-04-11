@@ -5,10 +5,10 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
 //go:embed wasm/hello.wasm

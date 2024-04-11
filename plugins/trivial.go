@@ -1,8 +1,8 @@
 package plugins
 
 import (
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
 func NewTrivialRequestProcessor() pluginapi.Plugin {

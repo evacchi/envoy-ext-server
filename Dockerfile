@@ -10,6 +10,7 @@ RUN apt-get update && apt-get -y upgrade \
 WORKDIR /build
 
 COPY go.mod *.go ./
+COPY extproc/*.go ./extproc/
 COPY plugins/*.go ./plugins/
 COPY plugins/wasm ./plugins/wasm/
 COPY pluginapi/* ./pluginapi/

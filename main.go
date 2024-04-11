@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 )
 
 var processors = map[string]pluginapi.Plugin{

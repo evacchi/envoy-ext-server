@@ -1,12 +1,10 @@
 package plugins
 
 import (
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"regexp"
 	"strings"
-
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
-	extproc "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
 func NewEchoRequestProcessor() pluginapi.Plugin {
@@ -17,10 +15,10 @@ type echoRequestProcessor struct {
 	opts *ep.ProcessingOptions
 }
 
-func joinHeaders(mvhs map[string][]string) map[string]extproc.HeaderValue {
-	hs := make(map[string]extproc.HeaderValue)
+func joinHeaders(mvhs map[string][]string) map[string]ep.HeaderValue {
+	hs := make(map[string]ep.HeaderValue)
 	for n, vs := range mvhs {
-		hs[n] = extproc.HeaderValue{Value: strings.Join(vs, ",")}
+		hs[n] = ep.HeaderValue{Value: strings.Join(vs, ",")}
 	}
 	return hs
 }

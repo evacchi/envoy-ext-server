@@ -2,12 +2,11 @@ package plugins
 
 import (
 	"encoding/json"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"log"
 
 	"github.com/nqd/flat"
-
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
 var masked = map[string][]string{

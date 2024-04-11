@@ -3,9 +3,8 @@ package plugins
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
-
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
 var cache map[string]bool

@@ -1,11 +1,10 @@
 package plugins
 
 import (
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"strconv"
 	"time"
-
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
 func NewTimerRequestProcessor() pluginapi.Plugin {

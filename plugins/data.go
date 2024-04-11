@@ -4,7 +4,7 @@ import (
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"github.com/google/uuid"
 
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 )
 
 func NewDataRequestProcessor() pluginapi.Plugin {

@@ -3,10 +3,9 @@ package plugins
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"hash"
-
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
 func NewDigestRequestProcessor() pluginapi.Plugin {
