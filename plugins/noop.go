@@ -1,0 +1,53 @@
+package plugins
+
+import (
+	"github.com/evacchi/envoy-ext-server/pluginapi"
+	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
+)
+
+func NewNoopRequestProcessor() pluginapi.Plugin {
+	return &noopRequestProcessor{}
+}
+
+type noopRequestProcessor struct {
+	opts *ep.ProcessingOptions
+}
+
+func (s *noopRequestProcessor) GetName() string {
+	return "noop"
+}
+
+func (s *noopRequestProcessor) GetOptions() *ep.ProcessingOptions {
+	return s.opts
+}
+
+func (s *noopRequestProcessor) ProcessRequestHeaders(ctx *ep.RequestContext, headers ep.AllHeaders) error {
+	return ctx.ContinueRequest()
+}
+
+func (s *noopRequestProcessor) ProcessRequestBody(ctx *ep.RequestContext, body []byte) error {
+	return ctx.ContinueRequest()
+}
+
+func (s *noopRequestProcessor) ProcessRequestTrailers(ctx *ep.RequestContext, trailers ep.AllHeaders) error {
+	return ctx.ContinueRequest()
+}
+
+func (s *noopRequestProcessor) ProcessResponseHeaders(ctx *ep.RequestContext, headers ep.AllHeaders) error {
+	return ctx.ContinueRequest()
+}
+
+func (s *noopRequestProcessor) ProcessResponseBody(ctx *ep.RequestContext, body []byte) error {
+	return ctx.ContinueRequest()
+}
+
+func (s *noopRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, trailers ep.AllHeaders) error {
+	return ctx.ContinueRequest()
+}
+
+func (s *noopRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+	s.opts = opts
+	return nil
+}
+
+func (s *noopRequestProcessor) Finish() {}

@@ -10,7 +10,9 @@ RUN apt-get update && apt-get -y upgrade \
 WORKDIR /build
 
 COPY go.mod *.go ./
-COPY wasm/* ./wasm/
+COPY plugins/*.go ./plugins/
+COPY plugins/wasm ./plugins/wasm/
+COPY pluginapi/* ./pluginapi/
 RUN go mod tidy \
     && go mod download \
     && go build -o /extproc

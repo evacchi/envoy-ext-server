@@ -2,29 +2,24 @@ package main
 
 import (
 	"flag"
+	"github.com/evacchi/envoy-ext-server/pluginapi"
+	"github.com/evacchi/envoy-ext-server/plugins"
 	"log"
 	"os"
 
 	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
-type processor interface {
-	Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error
-	Finish()
-
-	ep.RequestProcessor
-}
-
-var processors = map[string]processor{
-	"noop":    &noopRequestProcessor{},
-	"trivial": &trivialRequestProcessor{},
-	"timer":   &timerRequestProcessor{},
-	"data":    &dataRequestProcessor{},
-	"digest":  &digestRequestProcessor{},
-	"dedup":   &dedupRequestProcessor{},
-	"masker":  &maskerRequestProcessor{},
-	"echo":    &echoRequestProcessor{},
-	"wasm":    newWasmRequestProcessor(),
+var processors = map[string]pluginapi.Plugin{
+	"noop":    plugins.NewNoopRequestProcessor(),
+	"trivial": plugins.NewTrivialRequestProcessor(),
+	"timer":   plugins.NewTimerRequestProcessor(),
+	"data":    plugins.NewDataRequestProcessor(),
+	"digest":  plugins.NewDigestRequestProcessor(),
+	"dedup":   plugins.NewDedupRequestProcessor(),
+	"masker":  plugins.NewMaskerRequestProcessor(),
+	"echo":    plugins.NewEchoRequestProcessor(),
+	"wasm":    plugins.NewWasmRequestProcessor(),
 }
 
 func parseArgs(args []string) (port *int, opts *ep.ProcessingOptions, nonFlagArgs []string) {
