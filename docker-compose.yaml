@@ -22,10 +22,10 @@ services:
       - LOG_LEVEL=info
 
   # extprocs
-  noop:
+  multiplex:
     image: envoy-extproc-sdk-go-examples:${IMAGE_TAG:-compose}
     command:
-      - noop
+      - multiplex
 #  trivial:
 #    image: envoy-extproc-sdk-go-examples:${IMAGE_TAG:-compose}
 #    command:
