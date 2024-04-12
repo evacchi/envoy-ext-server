@@ -45,13 +45,26 @@ func main() {
 		log.Fatal("Passing a processor is required.")
 	}
 
-	cmd := args[1]
-	proc, exists := processors[cmd]
-	if !exists {
-		log.Fatalf("Processor \"%s\" not defined.", cmd)
+	//cmd := args[1]
+	//proc, exists := processors[cmd]
+	//if !exists {
+	//	log.Fatalf("Processor \"%s\" not defined.", cmd)
+	//}
+	port, opts, nonFlagArgs := parseArgs(os.Args[2:])
+
+	var names []string
+	var procs []ep.RequestProcessor
+	for n, p := range processors {
+		names = append(names, n)
+		procs = append(procs, p)
+		if err := p.Init(opts, nonFlagArgs); err != nil {
+			log.Fatalf("Initialize the processor is failed: %v.", err.Error())
+		}
+		defer p.Finish()
+
 	}
 
-	port, opts, nonFlagArgs := parseArgs(os.Args[2:])
+	proc := plugins.NewMultiplexRequestProcessor(names, procs)
 	if err := proc.Init(opts, nonFlagArgs); err != nil {
 		log.Fatalf("Initialize the processor is failed: %v.", err.Error())
 	}
