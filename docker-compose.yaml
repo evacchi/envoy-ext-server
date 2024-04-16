@@ -7,7 +7,8 @@ services:
       - "8080:8000"
       - "9901:9901"
     volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - ./internal/integration/testdata/envoy.yaml:/etc/envoy/envoy.yaml
+      - ./tmp:/tmp/blah:rw
 
   # upstream "echo" server
   upstream:
@@ -22,10 +23,23 @@ services:
       - LOG_LEVEL=info
 
   # extprocs
-  multiplex:
+#  multiplex:
+#    image: envoy-extproc-sdk-go-examples:${IMAGE_TAG:-compose}
+#    command:
+#      - multiplex
+  noop:
     image: envoy-extproc-sdk-go-examples:${IMAGE_TAG:-compose}
     command:
-      - multiplex
+      - ALL
+#      - '-network'
+#      - unix
+#      - '-address'
+#      - /tmp/blah/blah.sock
+    volumes:
+      - ./tmp:/tmp/blah:rw
+    environment:
+      - LOG_LEVEL=info
+
 #  trivial:
 #    image: envoy-extproc-sdk-go-examples:${IMAGE_TAG:-compose}
 #    command:

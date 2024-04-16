@@ -25,11 +25,11 @@ static_resources:
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
                       grpc_service:
-#                        envoy_grpc:
-#                          cluster_name: noop
-                        google_grpc:
-                          target_uri: "unix:///tmp/blah.sock"
-                          stat_prefix: "ext-proc-noop"
+                        envoy_grpc:
+                          cluster_name: noop
+#                        google_grpc:
+#                          target_uri: "unix:///tmp/blah/blah.sock"
+#                          stat_prefix: "ext-proc-noop"
                         timeout: 30s
                       failure_mode_allow: true
                       message_timeout: 0.2s
@@ -75,7 +75,7 @@ static_resources:
 #          - endpoint:
 #              address:
 #                pipe:
-#                  path: "/tmp/blah.sock"
+#                  path: "/tmp/blah/blah.sock"
 
     load_assignment:
       cluster_name: noop
@@ -86,9 +86,6 @@ static_resources:
               socket_address:
                 address: localhost
                 port_value: 50051
-#            address:
-#              pipe:
-#                path: "/tmp/blah.sock"
             hostname: localhost
     type: LOGICAL_DNS
     typed_extension_protocol_options:

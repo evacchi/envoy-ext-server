@@ -30,140 +30,140 @@ static_resources:
                           route:
                             cluster: upstream
                 http_filters:
+#                  - name: envoy.filters.http.ext_proc
+#                    typed_config:
+#                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
+#                      grpc_service:
+#                        envoy_grpc:
+#                          cluster_name: multiplex
+#                        timeout: 30s
+#                      failure_mode_allow: true
+#                      message_timeout: 0.2s
+#                      processing_mode:
+#                        request_header_mode: SEND
+#                        response_header_mode: SEND
+#                        request_body_mode: BUFFERED
+#                        response_body_mode: BUFFERED
+#                        request_trailer_mode: SKIP
+#                        response_trailer_mode: SKIP
+#                  - name: envoy.filters.http.ext_proc
+#                    typed_config:
+#                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
+#                      grpc_service:
+#                        envoy_grpc:
+#                          cluster_name: trivial
+#                        timeout: 30s
+#                      failure_mode_allow: true
+#                      message_timeout: 0.2s
+#                      processing_mode:
+#                        request_header_mode: SEND
+#                        response_header_mode: SEND
+#                        request_body_mode: BUFFERED
+#                        response_body_mode: BUFFERED
+#                        request_trailer_mode: SKIP
+#                        response_trailer_mode: SKIP
+#                  - name: envoy.filters.http.ext_proc
+#                    typed_config:
+#                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
+#                      grpc_service:
+#                        envoy_grpc:
+#                          cluster_name: timer
+#                        timeout: 30s
+#                      failure_mode_allow: true
+#                      message_timeout: 0.2s
+#                      processing_mode:
+#                        request_header_mode: SEND
+#                        response_header_mode: SEND
+#                        request_body_mode: BUFFERED
+#                        response_body_mode: BUFFERED
+#                        request_trailer_mode: SKIP
+#                        response_trailer_mode: SKIP
+#                  - name: envoy.filters.http.ext_proc
+#                    typed_config:
+#                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
+#                      grpc_service:
+#                        envoy_grpc:
+#                          cluster_name: data
+#                        timeout: 30s
+#                      failure_mode_allow: true
+#                      message_timeout: 0.2s
+#                      processing_mode:
+#                        request_header_mode: SEND
+#                        response_header_mode: SEND
+#                        request_body_mode: BUFFERED
+#                        response_body_mode: BUFFERED
+#                        request_trailer_mode: SKIP
+#                        response_trailer_mode: SKIP
+#                  - name: envoy.filters.http.ext_proc
+#                    typed_config:
+#                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
+#                      grpc_service:
+#                        envoy_grpc:
+#                          cluster_name: digest
+#                        timeout: 30s
+#                      failure_mode_allow: true
+#                      message_timeout: 0.2s
+#                      processing_mode:
+#                        request_header_mode: SEND
+#                        response_header_mode: SEND
+#                        request_body_mode: BUFFERED
+#                        response_body_mode: BUFFERED
+#                        request_trailer_mode: SKIP
+#                        response_trailer_mode: SKIP
+#                  - name: envoy.filters.http.ext_proc
+#                    typed_config:
+#                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
+#                      grpc_service:
+#                        envoy_grpc:
+#                          cluster_name: dedup
+#                        timeout: 30s
+#                      failure_mode_allow: true
+#                      message_timeout: 0.2s
+#                      processing_mode:
+#                        request_header_mode: SEND
+#                        response_header_mode: SEND
+#                        request_body_mode: BUFFERED
+#                        response_body_mode: BUFFERED
+#                        request_trailer_mode: SKIP
+#                        response_trailer_mode: SKIP
+#                  - name: envoy.filters.http.ext_proc
+#                    typed_config:
+#                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
+#                      grpc_service:
+#                        envoy_grpc:
+#                          cluster_name: masker
+#                        timeout: 30s
+#                      failure_mode_allow: true
+#                      message_timeout: 0.2s
+#                      processing_mode:
+#                        request_header_mode: SEND
+#                        response_header_mode: SEND
+#                        request_body_mode: BUFFERED
+#                        response_body_mode: BUFFERED
+#                        request_trailer_mode: SKIP
+#                        response_trailer_mode: SKIP
+#                  - name: envoy.filters.http.ext_proc
+#                    typed_config:
+#                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
+#                      grpc_service:
+#                        envoy_grpc:
+#                          cluster_name: echo
+#                        timeout: 30s
+#                      failure_mode_allow: true
+#                      message_timeout: 0.2s
+#                      processing_mode:
+#                        request_header_mode: SEND
+#                        response_header_mode: SEND
+#                        request_body_mode: BUFFERED
+#                        response_body_mode: BUFFERED
+#                        request_trailer_mode: SKIP
+#                        response_trailer_mode: SKIP
                   - name: envoy.filters.http.ext_proc
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
                       grpc_service:
                         envoy_grpc:
-                          cluster_name: multiplex
-                        timeout: 30s
-                      failure_mode_allow: true
-                      message_timeout: 0.2s
-                      processing_mode:
-                        request_header_mode: SEND
-                        response_header_mode: SEND
-                        request_body_mode: BUFFERED
-                        response_body_mode: BUFFERED
-                        request_trailer_mode: SKIP
-                        response_trailer_mode: SKIP
-                  - name: envoy.filters.http.ext_proc
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
-                      grpc_service:
-                        envoy_grpc:
-                          cluster_name: trivial
-                        timeout: 30s
-                      failure_mode_allow: true
-                      message_timeout: 0.2s
-                      processing_mode:
-                        request_header_mode: SEND
-                        response_header_mode: SEND
-                        request_body_mode: BUFFERED
-                        response_body_mode: BUFFERED
-                        request_trailer_mode: SKIP
-                        response_trailer_mode: SKIP
-                  - name: envoy.filters.http.ext_proc
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
-                      grpc_service:
-                        envoy_grpc:
-                          cluster_name: timer
-                        timeout: 30s
-                      failure_mode_allow: true
-                      message_timeout: 0.2s
-                      processing_mode:
-                        request_header_mode: SEND
-                        response_header_mode: SEND
-                        request_body_mode: BUFFERED
-                        response_body_mode: BUFFERED
-                        request_trailer_mode: SKIP
-                        response_trailer_mode: SKIP
-                  - name: envoy.filters.http.ext_proc
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
-                      grpc_service:
-                        envoy_grpc:
-                          cluster_name: data
-                        timeout: 30s
-                      failure_mode_allow: true
-                      message_timeout: 0.2s
-                      processing_mode:
-                        request_header_mode: SEND
-                        response_header_mode: SEND
-                        request_body_mode: BUFFERED
-                        response_body_mode: BUFFERED
-                        request_trailer_mode: SKIP
-                        response_trailer_mode: SKIP
-                  - name: envoy.filters.http.ext_proc
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
-                      grpc_service:
-                        envoy_grpc:
-                          cluster_name: digest
-                        timeout: 30s
-                      failure_mode_allow: true
-                      message_timeout: 0.2s
-                      processing_mode:
-                        request_header_mode: SEND
-                        response_header_mode: SEND
-                        request_body_mode: BUFFERED
-                        response_body_mode: BUFFERED
-                        request_trailer_mode: SKIP
-                        response_trailer_mode: SKIP
-                  - name: envoy.filters.http.ext_proc
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
-                      grpc_service:
-                        envoy_grpc:
-                          cluster_name: dedup
-                        timeout: 30s
-                      failure_mode_allow: true
-                      message_timeout: 0.2s
-                      processing_mode:
-                        request_header_mode: SEND
-                        response_header_mode: SEND
-                        request_body_mode: BUFFERED
-                        response_body_mode: BUFFERED
-                        request_trailer_mode: SKIP
-                        response_trailer_mode: SKIP
-                  - name: envoy.filters.http.ext_proc
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
-                      grpc_service:
-                        envoy_grpc:
-                          cluster_name: masker
-                        timeout: 30s
-                      failure_mode_allow: true
-                      message_timeout: 0.2s
-                      processing_mode:
-                        request_header_mode: SEND
-                        response_header_mode: SEND
-                        request_body_mode: BUFFERED
-                        response_body_mode: BUFFERED
-                        request_trailer_mode: SKIP
-                        response_trailer_mode: SKIP
-                  - name: envoy.filters.http.ext_proc
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
-                      grpc_service:
-                        envoy_grpc:
-                          cluster_name: echo
-                        timeout: 30s
-                      failure_mode_allow: true
-                      message_timeout: 0.2s
-                      processing_mode:
-                        request_header_mode: SEND
-                        response_header_mode: SEND
-                        request_body_mode: BUFFERED
-                        response_body_mode: BUFFERED
-                        request_trailer_mode: SKIP
-                        response_trailer_mode: SKIP
-                  - name: envoy.filters.http.ext_proc
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
-                      grpc_service:
-                        envoy_grpc:
-                          cluster_name: wasm
+                          cluster_name: noop
                         timeout: 30s
                       failure_mode_allow: true
                       message_timeout: 0.2s
@@ -199,19 +199,19 @@ static_resources:
                   socket_address:
                     address: upstream
                     port_value: 8000
-  - name: wasm
+  - name: noop
     dns_lookup_family: V4_ONLY
     lb_policy: LEAST_REQUEST
     load_assignment:
-      cluster_name: wasm
+      cluster_name: noop
       endpoints:
         - lb_endpoints:
             - endpoint:
                 address:
                   socket_address:
-                    address: wasm
+                    address: noop
                     port_value: 50051
-                hostname: wasm
+                hostname: noop
     type: LOGICAL_DNS
     typed_extension_protocol_options:
       envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
