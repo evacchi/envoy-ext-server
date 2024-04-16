@@ -25,8 +25,11 @@ static_resources:
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.ext_proc.v3.ExternalProcessor
                       grpc_service:
-                        envoy_grpc:
-                          cluster_name: noop
+#                        envoy_grpc:
+#                          cluster_name: noop
+                        google_grpc:
+                          target_uri: "unix:///tmp/blah.sock"
+                          stat_prefix: "ext-proc-noop"
                         timeout: 30s
                       failure_mode_allow: true
                       message_timeout: 0.2s
@@ -68,19 +71,31 @@ static_resources:
     load_assignment:
       cluster_name: noop
       endpoints:
-      - lb_endpoints:
-        - endpoint:
-            address:
-              socket_address:
-                address: localhost
-                port_value: 50051
-            hostname: localhost
-    type: LOGICAL_DNS
-    typed_extension_protocol_options:
-      envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
-        '@type': type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
-        explicit_http_config:
-          http2_protocol_options: {}
+        - lb_endpoints:
+          - endpoint:
+              address:
+                pipe:
+                  path: "/tmp/blah.sock"
+
+#    load_assignment:
+#      cluster_name: noop
+#      endpoints:
+#      - lb_endpoints:
+#        - endpoint:
+##            address:
+##              socket_address:
+##                address: localhost
+##                port_value: 50051
+#            address:
+#              pipe:
+#                path: "/tmp/blah.sock"
+##            hostname: localhost
+#    type: LOGICAL_DNS
+#    typed_extension_protocol_options:
+#      envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+#        '@type': type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+#        explicit_http_config:
+#          http2_protocol_options: {}
 
 admin:
   address:

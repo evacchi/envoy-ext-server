@@ -8,5 +8,5 @@ type ProcessingOptions struct {
 }
 
 func NewDefaultOptions() *ProcessingOptions {
-	return &ProcessingOptions{}
+	return &ProcessingOptions{LogPhases: false}
 }
