@@ -5,7 +5,6 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 	"time"
 
@@ -15,12 +14,12 @@ import (
 	hpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
-func Serve(port int, processor RequestProcessor) {
+func Serve(network, address string, processor RequestProcessor) {
 	if processor == nil {
 		log.Fatalf("cannot process request stream without `processor`")
 	}
 
-	lis, err := net.Listen("tcp", ":"+strconv.Itoa(port))
+	lis, err := net.Listen(network, address)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -38,7 +37,7 @@ func Serve(port int, processor RequestProcessor) {
 	epb.RegisterExternalProcessorServer(s, extproc)
 	hpb.RegisterHealthServer(s, &HealthServer{})
 
-	log.Printf("Starting ExtProc(%s) on port %d\n", name, port)
+	log.Printf("Starting ExtProc(%s) on %s://%s\n", name, network, address)
 
 	go s.Serve(lis)
 

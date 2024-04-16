@@ -22,9 +22,10 @@ var processors = map[string]pluginapi.Plugin{
 	"wasm":    plugins.NewWasmRequestProcessor(),
 }
 
-func parseArgs(args []string) (port *int, opts *ep.ProcessingOptions, nonFlagArgs []string) {
+func parseArgs(args []string) (network, address *string, opts *ep.ProcessingOptions, nonFlagArgs []string) {
 	rootCmd := flag.NewFlagSet("root", flag.ExitOnError)
-	port = rootCmd.Int("port", 50051, "the gRPC port.")
+	network = rootCmd.String("network", "tcp", "the gRPC port.")
+	address = rootCmd.String("address", ":50051", "the gRPC port.")
 
 	opts = ep.NewDefaultOptions()
 
@@ -45,30 +46,35 @@ func main() {
 		log.Fatal("Passing a processor is required.")
 	}
 
-	//cmd := args[1]
-	//proc, exists := processors[cmd]
-	//if !exists {
-	//	log.Fatalf("Processor \"%s\" not defined.", cmd)
-	//}
-	port, opts, nonFlagArgs := parseArgs(os.Args[2:])
+	var proc pluginapi.Plugin
+	network, address, opts, nonFlagArgs := parseArgs(os.Args[2:])
+	if args[1] == "ALL" {
+		var names []string
+		var procs []ep.RequestProcessor
+		for n, p := range processors {
+			names = append(names, n)
+			procs = append(procs, p)
+			if err := p.Init(opts, nonFlagArgs); err != nil {
+				log.Fatalf("Initialize the processor is failed: %v.", err.Error())
+			}
+			defer p.Finish()
 
-	var names []string
-	var procs []ep.RequestProcessor
-	for n, p := range processors {
-		names = append(names, n)
-		procs = append(procs, p)
-		if err := p.Init(opts, nonFlagArgs); err != nil {
+		}
+
+		proc = plugins.NewMultiplexRequestProcessor(names, procs)
+		if err := proc.Init(opts, nonFlagArgs); err != nil {
 			log.Fatalf("Initialize the processor is failed: %v.", err.Error())
 		}
-		defer p.Finish()
+		defer proc.Finish()
 
+	} else {
+		cmd := args[1]
+		p, exists := processors[cmd]
+		if !exists {
+			log.Fatalf("Processor \"%s\" not defined.", cmd)
+		}
+		proc = p
 	}
 
-	proc := plugins.NewMultiplexRequestProcessor(names, procs)
-	if err := proc.Init(opts, nonFlagArgs); err != nil {
-		log.Fatalf("Initialize the processor is failed: %v.", err.Error())
-	}
-	defer proc.Finish()
-
-	ep.Serve(*port, proc)
+	ep.Serve(*network, *address, proc)
 }
