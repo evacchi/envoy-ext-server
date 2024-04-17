@@ -74,6 +74,10 @@ func main() {
 			log.Fatalf("Processor \"%s\" not defined.", cmd)
 		}
 		proc = p
+		if err := p.Init(opts, nonFlagArgs); err != nil {
+			log.Fatalf("Initialize the processor is failed: %v.", err.Error())
+		}
+		defer p.Finish()
 	}
 
 	ep.Serve(*network, *address, proc)

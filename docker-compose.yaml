@@ -7,8 +7,10 @@ services:
       - "8080:8000"
       - "9901:9901"
     volumes:
-      - ./internal/integration/testdata/envoy.yaml:/etc/envoy/envoy.yaml
-      - ./tmp:/tmp/blah:rw
+      - ./internal/integration/testdata/envoy-noop.yaml:/etc/envoy/envoy.yaml
+      - ./tmp/blah:/tmp/blah:rw
+    environment:
+      - ENVOY_LOG_LEVEL=debug
 
   # upstream "echo" server
   upstream:
@@ -31,12 +33,13 @@ services:
     image: envoy-extproc-sdk-go-examples:${IMAGE_TAG:-compose}
     command:
       - ALL
-#      - '-network'
-#      - unix
-#      - '-address'
-#      - /tmp/blah/blah.sock
+      - '-network'
+      - unix
+      - '-address'
+      - /tmp/blah/blah.sock
+      - '-log-phases'
     volumes:
-      - ./tmp:/tmp/blah:rw
+      - ./tmp/blah:/tmp/blah:rw
     environment:
       - LOG_LEVEL=info
 
