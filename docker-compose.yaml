@@ -11,7 +11,11 @@ services:
       - ./tmp/blah:/tmp/blah:rw
     environment:
       - ENVOY_LOG_LEVEL=debug
-
+    command:
+      - '-c'
+      - /etc/envoy/envoy.yaml
+#      - '-l'
+#      - debug
   # upstream "echo" server
   upstream:
     hostname: upstream
@@ -32,12 +36,11 @@ services:
   noop:
     image: envoy-extproc-sdk-go-examples:${IMAGE_TAG:-compose}
     command:
-      - ALL
+      - noop
       - '-network'
       - unix
       - '-address'
       - /tmp/blah/blah.sock
-      - '-log-phases'
     volumes:
       - ./tmp/blah:/tmp/blah:rw
     environment:
