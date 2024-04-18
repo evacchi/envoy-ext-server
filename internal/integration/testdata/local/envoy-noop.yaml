@@ -2,7 +2,7 @@ static_resources:
   listeners:
     - name: listener
       address:
-        socket_address: {address: 0.0.0.0, port_value: 8000 }
+        socket_address: {address: 0.0.0.0, port_value: 8080 }
       filter_chains:
         - filters:
             - name: envoy.filters.network.http_connection_manager
@@ -29,7 +29,7 @@ static_resources:
                           cluster_name: noop
 #                        google_grpc:
 #                          target_uri: "https://localhost:50051"
-##                          target_uri: "unix:///tmp/blah/blah.sock"
+#                          target_uri: "unix:///tmp/blah.sock"
 #                          stat_prefix: "ext-proc-noop"
                         timeout: 30s
                       failure_mode_allow: true
@@ -66,6 +66,30 @@ static_resources:
                   socket_address:
                     address: localhost
                     port_value: 8000
+
+  - name: noop
+    dns_lookup_family: V4_ONLY
+    lb_policy: LEAST_REQUEST
+    load_assignment:
+      cluster_name: noop
+      endpoints:
+        - lb_endpoints:
+            - endpoint:
+                address:
+                  pipe:
+                    path: "/tmp/blah.sock"
+#                  socket_address:
+#                    address: noop
+#                    port_value: 50051
+                hostname: noop
+    type: LOGICAL_DNS
+    typed_extension_protocol_options:
+      envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+        '@type': type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+        explicit_http_config:
+          http2_protocol_options: { }
+
+
 
 
 admin:

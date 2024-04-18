@@ -37,7 +37,7 @@ static_resources:
 #                        envoy_grpc:
 #                          cluster_name: noop
                         google_grpc:
-                          target_uri: "unix:///tmp/blah/blah.sock"
+                          target_uri: "unix:///tmp/blah.sock"
                           stat_prefix: "ext-proc-noop"
 
                         timeout: 30s
@@ -84,9 +84,11 @@ static_resources:
         - lb_endpoints:
             - endpoint:
                 address:
-                  socket_address:
-                    address: noop
-                    port_value: 50051
+                  pipe:
+                    path: "/tmp/blah/blah.sock"
+#                  socket_address:
+#                    address: noop
+#                    port_value: 50051
                 hostname: noop
     type: LOGICAL_DNS
     typed_extension_protocol_options:
