@@ -79,9 +79,9 @@ static_resources:
 #                  pipe:
 #                    path: "/tmp/blah.sock"
                   socket_address:
-                    address: noop
+                    address: localhost
                     port_value: 50051
-                hostname: noop
+                hostname: localhost
     type: LOGICAL_DNS
     typed_extension_protocol_options:
       envoy.extensions.upstreams.http.v3.HttpProtocolOptions:

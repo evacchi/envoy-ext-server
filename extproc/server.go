@@ -24,8 +24,9 @@ func Serve(network, address string, processor RequestProcessor) {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	sopts := []grpc.ServerOption{grpc.MaxConcurrentStreams(1000)}
-	s := grpc.NewServer(sopts...)
+	//sopts := []grpc.ServerOption{grpc.MaxConcurrentStreams(1000)}
+	//s := grpc.NewServer(sopts...)
+	s := grpc.NewServer()
 
 	name := processor.GetName()
 	opts := processor.GetOptions() // TODO: figure out command line overrides

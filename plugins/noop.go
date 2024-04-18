@@ -3,7 +3,6 @@ package plugins
 import (
 	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
-	"log"
 )
 
 func NewNoopRequestProcessor() pluginapi.Plugin {
@@ -27,7 +26,6 @@ func (s *noopRequestProcessor) ProcessRequestHeaders(ctx *ep.RequestContext, hea
 }
 
 func (s *noopRequestProcessor) ProcessRequestBody(ctx *ep.RequestContext, body []byte) error {
-	log.Println("oog")
 	return ctx.ContinueRequest()
 }
 
