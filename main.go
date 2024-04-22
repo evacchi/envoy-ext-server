@@ -22,9 +22,9 @@ var processors = map[string]pluginapi.Plugin{
 	"wasm":    plugins.NewWasmRequestProcessor(),
 }
 
-func parseArgs(args []string) (port *int, opts *ep.ProcessingOptions, nonFlagArgs []string) {
+func parseArgs(args []string) (conn *string, opts *ep.ProcessingOptions, nonFlagArgs []string) {
 	rootCmd := flag.NewFlagSet("root", flag.ExitOnError)
-	port = rootCmd.Int("port", 50051, "the gRPC port.")
+	conn = rootCmd.String("listen", "tcp://:50051", "The connection string.")
 
 	opts = ep.NewDefaultOptions()
 
