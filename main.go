@@ -6,6 +6,7 @@ import (
 	"github.com/evacchi/envoy-ext-server/plugins"
 	"log"
 	"os"
+	"plugin"
 
 	ep "github.com/evacchi/envoy-ext-server/extproc"
 )
@@ -56,6 +57,20 @@ func loadFilterChain(cfgFile *string) []pluginapi.Plugin {
 	var ps []pluginapi.Plugin
 	for _, fc := range config.FilterChains {
 		for _, f := range fc.Filters {
+			switch f.Type {
+			case "built-in":
+			case "go-plugin":
+				p, err := plugin.Open(f.Path)
+				if err != nil {
+					log.Fatal(err)
+				}
+				factory, err := p.Lookup("New")
+				if err != nil {
+					log.Fatal(err)
+				}
+				pf := factory.(func() pluginapi.Plugin)
+				pluginapi.Register(f.Name, pf)
+			}
 			p := pluginapi.Instantiate(f.Name, pluginapi.FilterConfig{})
 			ps = append(ps, p)
 		}

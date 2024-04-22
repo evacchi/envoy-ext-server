@@ -1,4 +1,4 @@
-package echo
+package main
 
 import (
 	ep "github.com/evacchi/envoy-ext-server/extproc"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func NewEchoRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &echoRequestProcessor{}
 }
 

@@ -1,16 +1,16 @@
-package dedup
+package main
 
 import (
 	"crypto/sha256"
 	"encoding/hex"
 	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
-	"github.com/evacchi/envoy-ext-server/plugins/digest"
+	"hash"
 )
 
 var cache map[string]bool
 
-func NewDedupRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &dedupRequestProcessor{}
 }
 
@@ -82,7 +82,8 @@ func (s *dedupRequestProcessor) ProcessRequestHeaders(ctx *ep.RequestContext, he
 
 func (s *dedupRequestProcessor) ProcessRequestBody(ctx *ep.RequestContext, body []byte) error {
 
-	hasher, _ := digest.GetHasher(ctx)
+	hh, _ := ctx.GetValue("hasher")
+	hasher := hh.(hash.Hash)
 	hasher.Write([]byte(":"))
 	hasher.Write(body)
 	if ctx.EndOfStream {
@@ -106,7 +107,8 @@ func (s *dedupRequestProcessor) ProcessRequestTrailers(ctx *ep.RequestContext, t
 }
 
 func (s *dedupRequestProcessor) ProcessResponseHeaders(ctx *ep.RequestContext, headers ep.AllHeaders) error {
-	digest, _ := digest.GetDigest(ctx)
+	dd, _ := ctx.GetValue("digest")
+	digest := dd.(string)
 	uncacheRequest(digest)
 	if ctx.EndOfStream {
 		ctx.AddHeader("x-extproc-request-digest", ep.HeaderValue{RawValue: []byte(digest)})
@@ -115,7 +117,8 @@ func (s *dedupRequestProcessor) ProcessResponseHeaders(ctx *ep.RequestContext, h
 }
 
 func (s *dedupRequestProcessor) ProcessResponseBody(ctx *ep.RequestContext, body []byte) error {
-	digest, _ := digest.GetDigest(ctx)
+	dd, _ := ctx.GetValue("digest")
+	digest := dd.(string)
 	uncacheRequest(digest)
 	if ctx.EndOfStream {
 		ctx.AddHeader("x-extproc-request-digest", ep.HeaderValue{RawValue: []byte(digest)})

@@ -1,4 +1,4 @@
-package masker
+package main
 
 import (
 	"encoding/json"
@@ -17,7 +17,7 @@ var masked = map[string][]string{
 	"response": {},
 }
 
-func NewMaskerRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &maskerRequestProcessor{}
 }
 

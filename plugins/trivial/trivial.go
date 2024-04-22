@@ -1,11 +1,11 @@
-package trivial
+package main
 
 import (
 	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 )
 
-func NewTrivialRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &trivialRequestProcessor{}
 }
 

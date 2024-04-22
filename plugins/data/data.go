@@ -1,4 +1,4 @@
-package data
+package main
 
 import (
 	"github.com/evacchi/envoy-ext-server/pluginapi"
@@ -7,7 +7,7 @@ import (
 	ep "github.com/evacchi/envoy-ext-server/extproc"
 )
 
-func NewDataRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &dataRequestProcessor{}
 }
 

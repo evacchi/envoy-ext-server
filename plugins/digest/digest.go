@@ -1,4 +1,4 @@
-package digest
+package main
 
 import (
 	"crypto/sha256"
@@ -8,7 +8,7 @@ import (
 	"hash"
 )
 
-func NewDigestRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &digestRequestProcessor{}
 }
 

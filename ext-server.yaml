@@ -1,20 +1,29 @@
 filter_chains:
   - filters:
     - name: data
-      type: built-in
+      type: go-plugin
+      path: plugins/data/data.so
     - name: dedup
-      type: built-in
+      type: go-plugin
+      path: plugins/dedup/dedup.so
     - name: digest
-      type: built-in
+      type: go-plugin
+      path: plugins/digest/digest.so
     - name: echo
-      type: built-in
+      type: go-plugin
+      path: plugins/echo/echo.so
     - name: masker
-      type: built-in
+      type: go-plugin
+      path: plugins/masker/masker.so
     - name: noop
-      type: built-in
+      type: go-plugin
+      path: plugins/noop/noop.so
     - name: timer
-      type: built-in
+      type: go-plugin
+      path: plugins/timer/timer.so
     - name: trivial
       type: go-plugin
+      path: plugins/trivial/trivial.so
     - name: wasm
-      type: built-in
+      type: go-plugin
+      path: plugins/wasm/wasm.so

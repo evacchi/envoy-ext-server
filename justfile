@@ -28,6 +28,15 @@ run example="noop" *flags="":
 
 build *flags="":
     go build {{flags}}
+    cd plugins/data    && go build -buildmode=plugin
+    cd plugins/dedup   && go build -buildmode=plugin
+    cd plugins/digest  && go build -buildmode=plugin
+    cd plugins/echo    && go build -buildmode=plugin
+    cd plugins/masker  && go build -buildmode=plugin
+    cd plugins/noop    && go build -buildmode=plugin
+    cd plugins/timer   && go build -buildmode=plugin
+    cd plugins/trivial && go build -buildmode=plugin
+    cd plugins/wasm    && go build -buildmode=plugin
 
 containerize tag=image_tag *flags="": 
     docker build . -t {{image_name}}:{{tag}} {{flags}}

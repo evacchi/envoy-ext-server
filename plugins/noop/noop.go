@@ -1,11 +1,11 @@
-package noop
+package main
 
 import (
 	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 )
 
-func NewNoopRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &noopRequestProcessor{}
 }
 

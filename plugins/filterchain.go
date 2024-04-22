@@ -3,29 +3,8 @@ package plugins
 import (
 	"github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
-	"github.com/evacchi/envoy-ext-server/plugins/data"
-	"github.com/evacchi/envoy-ext-server/plugins/dedup"
-	"github.com/evacchi/envoy-ext-server/plugins/digest"
-	"github.com/evacchi/envoy-ext-server/plugins/echo"
-	"github.com/evacchi/envoy-ext-server/plugins/masker"
-	"github.com/evacchi/envoy-ext-server/plugins/noop"
-	"github.com/evacchi/envoy-ext-server/plugins/timer"
-	"github.com/evacchi/envoy-ext-server/plugins/trivial"
-	"github.com/evacchi/envoy-ext-server/plugins/wasm"
 	"log"
 )
-
-func init() {
-	pluginapi.Register("data", data.NewDataRequestProcessor)
-	pluginapi.Register("dedup", dedup.NewDedupRequestProcessor)
-	pluginapi.Register("digest", digest.NewDigestRequestProcessor)
-	pluginapi.Register("echo", echo.NewEchoRequestProcessor)
-	pluginapi.Register("masker", masker.NewMaskerRequestProcessor)
-	pluginapi.Register("noop", noop.NewNoopRequestProcessor)
-	pluginapi.Register("timer", timer.NewTimerRequestProcessor)
-	pluginapi.Register("trivial", trivial.NewTrivialRequestProcessor)
-	pluginapi.Register("wasm", wasm.NewWasmRequestProcessor)
-}
 
 func NewFilterChain(processors []pluginapi.Plugin) pluginapi.Plugin {
 	return &FilterChain{processors: processors}

@@ -1,4 +1,4 @@
-package wasm
+package main
 
 import (
 	"bytes"
@@ -14,7 +14,7 @@ import (
 //go:embed wasm/hello.wasm
 var wasmBin []byte
 
-func NewWasmRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &wasmRequestProcessor{}
 }
 

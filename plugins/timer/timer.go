@@ -1,4 +1,4 @@
-package timer
+package main
 
 import (
 	ep "github.com/evacchi/envoy-ext-server/extproc"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func NewTimerRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &timerRequestProcessor{}
 }
 
