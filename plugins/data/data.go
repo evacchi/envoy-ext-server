@@ -1,4 +1,4 @@
-package plugins
+package data
 
 import (
 	"github.com/evacchi/envoy-ext-server/pluginapi"

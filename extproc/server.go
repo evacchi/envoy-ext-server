@@ -20,7 +20,7 @@ func Serve(listen string, processor RequestProcessor) {
 		log.Fatalf("cannot process request stream without `processor`")
 	}
 
-	conn := strings.Split(listen, ":")
+	conn := strings.Split(listen, "://")
 	if len(conn) != 2 {
 		log.Fatalf("invalid listen address: %s", listen)
 	}

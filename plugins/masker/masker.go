@@ -1,4 +1,4 @@
-package plugins
+package masker
 
 import (
 	"encoding/json"

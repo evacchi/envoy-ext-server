@@ -1,4 +1,4 @@
-package plugins
+package trivial
 
 import (
 	ep "github.com/evacchi/envoy-ext-server/extproc"

@@ -10,23 +10,13 @@ import (
 	ep "github.com/evacchi/envoy-ext-server/extproc"
 )
 
-var processors = map[string]pluginapi.Plugin{
-	"noop":    plugins.NewNoopRequestProcessor(),
-	"trivial": plugins.NewTrivialRequestProcessor(),
-	"timer":   plugins.NewTimerRequestProcessor(),
-	"data":    plugins.NewDataRequestProcessor(),
-	"digest":  plugins.NewDigestRequestProcessor(),
-	"dedup":   plugins.NewDedupRequestProcessor(),
-	"masker":  plugins.NewMaskerRequestProcessor(),
-	"echo":    plugins.NewEchoRequestProcessor(),
-	"wasm":    plugins.NewWasmRequestProcessor(),
-}
-
-func parseArgs(args []string) (conn *string, opts *ep.ProcessingOptions, nonFlagArgs []string) {
+func parseArgs(args []string) (cfgFile *string, opts *ep.ProcessingOptions, nonFlagArgs []string) {
 	rootCmd := flag.NewFlagSet("root", flag.ExitOnError)
-	conn = rootCmd.String("listen", "tcp://:50051", "The connection string.")
+	//conn = rootCmd.String("listen", "tcp://:50051", "The connection string.")
 
 	opts = ep.NewDefaultOptions()
+
+	cfgFile = rootCmd.String("c", "ext-server.yaml", "config file")
 
 	rootCmd.BoolVar(&opts.LogStream, "log-stream", false, "log the stream or not.")
 	rootCmd.BoolVar(&opts.LogPhases, "log-phases", false, "log the phases or not.")
@@ -41,34 +31,34 @@ func parseArgs(args []string) (conn *string, opts *ep.ProcessingOptions, nonFlag
 func main() {
 	// cmd subCmd arg, arg2,...
 	args := os.Args
-	if len(args) < 2 {
-		log.Fatal("Passing a processor is required.")
+	conn := "tcp://:50051"
+	if len(args) >= 2 {
+		//log.Fatal("Passing a processor is required.")
+		conn = args[1]
 	}
 
-	//cmd := args[1]
-	//proc, exists := processors[cmd]
-	//if !exists {
-	//	log.Fatalf("Processor \"%s\" not defined.", cmd)
-	//}
-	port, opts, nonFlagArgs := parseArgs(os.Args[2:])
-
-	var names []string
-	var procs []ep.RequestProcessor
-	for n, p := range processors {
-		names = append(names, n)
-		procs = append(procs, p)
-		if err := p.Init(opts, nonFlagArgs); err != nil {
-			log.Fatalf("Initialize the processor is failed: %v.", err.Error())
-		}
-		defer p.Finish()
-
-	}
-
-	proc := plugins.NewMultiplexRequestProcessor(names, procs)
+	cfgFile, opts, nonFlagArgs := parseArgs(os.Args[2:])
+	ps := loadFilterChain(cfgFile)
+	proc := plugins.NewFilterChain(ps)
 	if err := proc.Init(opts, nonFlagArgs); err != nil {
 		log.Fatalf("Initialize the processor is failed: %v.", err.Error())
 	}
 	defer proc.Finish()
 
-	ep.Serve(*port, proc)
+	ep.Serve(conn, proc)
+}
+
+func loadFilterChain(cfgFile *string) []pluginapi.Plugin {
+	config, err := pluginapi.ReadConfig(*cfgFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var ps []pluginapi.Plugin
+	for _, fc := range config.FilterChains {
+		for _, f := range fc.Filters {
+			p := pluginapi.Instantiate(f.Name, pluginapi.FilterConfig{})
+			ps = append(ps, p)
+		}
+	}
+	return ps
 }
