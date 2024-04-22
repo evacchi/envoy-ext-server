@@ -27,3 +27,6 @@ filter_chains:
     - name: wasm
       type: go-plugin
       path: plugins/wasm/wasm.so
+      config:
+        name: hello
+        path: plugins/wasm/wasm/hello.wasm

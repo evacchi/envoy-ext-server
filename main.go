@@ -41,7 +41,7 @@ func main() {
 	cfgFile, opts, nonFlagArgs := parseArgs(os.Args[2:])
 	ps := loadFilterChain(cfgFile)
 	proc := plugins.NewFilterChain(ps)
-	if err := proc.Init(opts, nonFlagArgs); err != nil {
+	if err := proc.Init(opts, nonFlagArgs, pluginapi.FilterConfig{}); err != nil {
 		log.Fatalf("Initialize the processor is failed: %v.", err.Error())
 	}
 	defer proc.Finish()
@@ -71,7 +71,7 @@ func loadFilterChain(cfgFile *string) []pluginapi.Plugin {
 				pf := factory.(func() pluginapi.Plugin)
 				pluginapi.Register(f.Name, pf)
 			}
-			p := pluginapi.Instantiate(f.Name, pluginapi.FilterConfig{})
+			p := pluginapi.Instantiate(f)
 			ps = append(ps, p)
 		}
 	}

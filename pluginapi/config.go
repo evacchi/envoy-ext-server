@@ -15,9 +15,10 @@ type Filter struct {
 }
 
 type FilterConfig struct {
-	Name string `yaml:"name"`
-	Type string `yaml:"type"`
-	Path string `yaml:"path"`
+	Name   string    `yaml:"name"`
+	Type   string    `yaml:"type"`
+	Path   string    `yaml:"path"`
+	Config yaml.Node `yaml:"config"`
 }
 
 func ReadConfig(fname string) (*Config, error) {

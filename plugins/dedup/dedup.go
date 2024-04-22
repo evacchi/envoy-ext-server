@@ -130,7 +130,7 @@ func (s *dedupRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, 
 	return ctx.ContinueRequest()
 }
 
-func (s *dedupRequestProcessor) Init(opts *ep.ProcessingOptions, extnonFlagArgsraArgs []string) error {
+func (s *dedupRequestProcessor) Init(opts *ep.ProcessingOptions, extnonFlagArgsraArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

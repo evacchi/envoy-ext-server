@@ -5,7 +5,7 @@ import (
 )
 
 type Plugin interface {
-	Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error
+	Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config FilterConfig) error
 	Finish()
 
 	ep.RequestProcessor

@@ -38,6 +38,9 @@ build *flags="":
     cd plugins/trivial && go build -buildmode=plugin
     cd plugins/wasm    && go build -buildmode=plugin
 
+clean:
+    rm plugins/**/*.so
+
 containerize tag=image_tag *flags="": 
     docker build . -t {{image_name}}:{{tag}} {{flags}}
 #    [[ -d extproc ]] && rm -rf extproc || true

@@ -45,7 +45,7 @@ func (s *noopRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, t
 	return ctx.ContinueRequest()
 }
 
-func (s *noopRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *noopRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

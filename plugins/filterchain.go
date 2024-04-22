@@ -14,13 +14,8 @@ type FilterChain struct {
 	processors []pluginapi.Plugin
 }
 
-func (m FilterChain) Init(opts *extproc.ProcessingOptions, nonFlagArgs []string) error {
+func (m FilterChain) Init(opts *extproc.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	log.Println("FilterChain Init")
-	for _, p := range m.processors {
-		if err := p.Init(opts, nonFlagArgs); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 

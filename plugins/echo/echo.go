@@ -82,7 +82,7 @@ func (s *echoRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, t
 	return ctx.ContinueRequest()
 }
 
-func (s *echoRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *echoRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

@@ -92,7 +92,7 @@ func (s *digestRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext,
 	return ctx.ContinueRequest()
 }
 
-func (s *digestRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *digestRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

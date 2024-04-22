@@ -63,7 +63,7 @@ func (s *timerRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, 
 	return ctx.ContinueRequest()
 }
 
-func (s *timerRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *timerRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

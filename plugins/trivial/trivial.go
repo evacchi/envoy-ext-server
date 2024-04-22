@@ -47,7 +47,7 @@ func (s *trivialRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext
 	return ctx.ContinueRequest()
 }
 
-func (s *trivialRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *trivialRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }
