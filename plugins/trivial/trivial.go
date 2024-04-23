@@ -1,11 +1,11 @@
-package plugins
+package main
 
 import (
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
-func NewTrivialRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &trivialRequestProcessor{}
 }
 
@@ -47,7 +47,7 @@ func (s *trivialRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext
 	return ctx.ContinueRequest()
 }
 
-func (s *trivialRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *trivialRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

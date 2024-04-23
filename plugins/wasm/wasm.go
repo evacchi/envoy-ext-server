@@ -1,21 +1,24 @@
-package plugins
+package main
 
 import (
 	"bytes"
 	"context"
 	_ "embed"
 	"fmt"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
+	"os"
 )
 
-//go:embed wasm/hello.wasm
-var wasmBin []byte
-
-func NewWasmRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &wasmRequestProcessor{}
+}
+
+type Config struct {
+	Name string `yaml:"name"`
+	Path string `yaml:"path"`
 }
 
 type wasmRequestProcessor struct {
@@ -78,7 +81,17 @@ func (s *wasmRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, t
 	return ctx.ContinueRequest()
 }
 
-func (s *wasmRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *wasmRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
+	cfg := &Config{}
+	err := config.Config.Decode(cfg)
+	if err != nil {
+		return err
+	}
+	wasmBin, err := os.ReadFile(cfg.Path)
+	if err != nil {
+		return err
+	}
+
 	s.opts = opts
 	c := context.Background()
 	rt := wazero.NewRuntime(c)

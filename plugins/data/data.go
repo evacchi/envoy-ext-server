@@ -1,13 +1,13 @@
-package plugins
+package main
 
 import (
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"github.com/google/uuid"
 
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 )
 
-func NewDataRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &dataRequestProcessor{}
 }
 
@@ -50,7 +50,7 @@ func (s *dataRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, t
 	return ctx.ContinueRequest()
 }
 
-func (s *dataRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *dataRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

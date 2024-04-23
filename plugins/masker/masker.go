@@ -1,13 +1,12 @@
-package plugins
+package main
 
 import (
 	"encoding/json"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"log"
 
 	"github.com/nqd/flat"
-
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
 var masked = map[string][]string{
@@ -18,7 +17,7 @@ var masked = map[string][]string{
 	"response": {},
 }
 
-func NewMaskerRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &maskerRequestProcessor{}
 }
 
@@ -142,7 +141,7 @@ func (s *maskerRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext,
 	return ctx.ContinueRequest()
 }
 
-func (s *maskerRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *maskerRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

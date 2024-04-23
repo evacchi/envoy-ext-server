@@ -1,14 +1,13 @@
-package plugins
+package main
 
 import (
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"strconv"
 	"time"
-
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
-func NewTimerRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &timerRequestProcessor{}
 }
 
@@ -64,7 +63,7 @@ func (s *timerRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, 
 	return ctx.ContinueRequest()
 }
 
-func (s *timerRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *timerRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }

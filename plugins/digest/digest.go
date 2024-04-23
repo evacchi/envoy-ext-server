@@ -1,15 +1,14 @@
-package plugins
+package main
 
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	ep "github.com/evacchi/envoy-ext-server/extproc"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
 	"hash"
-
-	ep "github.com/wrossmorrow/envoy-extproc-sdk-go"
 )
 
-func NewDigestRequestProcessor() pluginapi.Plugin {
+func New() pluginapi.Plugin {
 	return &digestRequestProcessor{}
 }
 
@@ -17,7 +16,7 @@ type digestRequestProcessor struct {
 	opts *ep.ProcessingOptions
 }
 
-func getHasher(ctx *ep.RequestContext) (hash.Hash, error) {
+func GetHasher(ctx *ep.RequestContext) (hash.Hash, error) {
 	val, err := ctx.GetValue("hasher")
 	if err != nil {
 		return nil, err
@@ -25,7 +24,7 @@ func getHasher(ctx *ep.RequestContext) (hash.Hash, error) {
 	return val.(hash.Hash), nil
 }
 
-func getDigest(ctx *ep.RequestContext) (string, error) {
+func GetDigest(ctx *ep.RequestContext) (string, error) {
 	val, err := ctx.GetValue("digest")
 	if err != nil {
 		return "", err
@@ -57,7 +56,7 @@ func (s *digestRequestProcessor) ProcessRequestHeaders(ctx *ep.RequestContext, h
 }
 
 func (s *digestRequestProcessor) ProcessRequestBody(ctx *ep.RequestContext, body []byte) error {
-	hasher, _ := getHasher(ctx)
+	hasher, _ := GetHasher(ctx)
 	hasher.Write([]byte(":"))
 	hasher.Write(body)
 
@@ -75,7 +74,7 @@ func (s *digestRequestProcessor) ProcessRequestTrailers(ctx *ep.RequestContext, 
 
 func (s *digestRequestProcessor) ProcessResponseHeaders(ctx *ep.RequestContext, headers ep.AllHeaders) error {
 	if ctx.EndOfStream {
-		digest, _ := getDigest(ctx)
+		digest, _ := GetDigest(ctx)
 		ctx.AddHeader("x-extproc-request-digest", ep.HeaderValue{RawValue: []byte(digest)})
 	}
 	return ctx.ContinueRequest()
@@ -83,7 +82,7 @@ func (s *digestRequestProcessor) ProcessResponseHeaders(ctx *ep.RequestContext, 
 
 func (s *digestRequestProcessor) ProcessResponseBody(ctx *ep.RequestContext, body []byte) error {
 	if ctx.EndOfStream {
-		digest, _ := getDigest(ctx)
+		digest, _ := GetDigest(ctx)
 		ctx.AddHeader("x-extproc-request-digest", ep.HeaderValue{RawValue: []byte(digest)})
 	}
 	return ctx.ContinueRequest()
@@ -93,7 +92,7 @@ func (s *digestRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext,
 	return ctx.ContinueRequest()
 }
 
-func (s *digestRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string) error {
+func (s *digestRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
 	s.opts = opts
 	return nil
 }
