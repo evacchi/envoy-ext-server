@@ -26,14 +26,6 @@ type RequestProcessor interface {
 	ProcessRequestBody(ctx *RequestContext, body []byte) error
 }
 
-func NewGenericExtProcServer(name string, processor RequestProcessor, options *ProcessingOptions) *GenericExtProcServer {
-	return &GenericExtProcServer{
-		name:      name,
-		processor: processor,
-		options:   options,
-	}
-}
-
 type GenericExtProcServer struct {
 	name      string
 	processor RequestProcessor
