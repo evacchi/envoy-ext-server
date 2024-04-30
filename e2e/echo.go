@@ -1,17 +1,15 @@
-package main
+package e2e
 
 import (
+	"context"
 	"encoding/json"
-	"flag"
-	"io/ioutil"
+	"io"
 	"log"
+	"net"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
-)
-
-var (
-	port = flag.String("port", "8000", "port to listen on")
 )
 
 type Request struct {
@@ -24,7 +22,6 @@ type Request struct {
 }
 
 func echo(w http.ResponseWriter, req *http.Request) {
-	log.Print("[" + time.Now().UTC().String() + "] " + req.Method + " " + req.URL.String())
 
 	r := Request{
 		Datetime: time.Now().UTC().String(),
@@ -35,7 +32,7 @@ func echo(w http.ResponseWriter, req *http.Request) {
 		Body:     "",
 	}
 	if req.Body != nil {
-		bodyBytes, err := ioutil.ReadAll(req.Body)
+		bodyBytes, err := io.ReadAll(req.Body)
 		if err != nil {
 			log.Printf("Body reading error: %v", err)
 			return
@@ -48,17 +45,25 @@ func echo(w http.ResponseWriter, req *http.Request) {
 	_, ok := r.Query["delay"]
 	if ok && len(r.Query["delay"]) > 0 {
 		delay, _ := time.ParseDuration(r.Query["delay"][0] + "s")
-		log.Printf("Delay: %v\n", delay)
 		time.Sleep(delay)
 	}
 
 	w.Write(rb)
 }
 
-func main() {
-	flag.Parse()
-	log.Print("Running echo server on " + *port)
-	http.HandleFunc("/", echo)
-	err := http.ListenAndServe(":"+*port, nil)
-	log.Print("%v", err)
+func setupEcho(ctx context.Context, port int) {
+	lis, err := net.Listen("tcp", ":"+strconv.Itoa(port))
+	if err != nil {
+		log.Fatal(err)
+	}
+	srv := &http.Server{
+		Handler: http.HandlerFunc(echo),
+	}
+	go func() {
+		if err := srv.Serve(lis); err != nil {
+			log.Fatal(err)
+		}
+	}()
+	<-ctx.Done()
+	srv.Close()
 }

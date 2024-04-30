@@ -1,13 +1,10 @@
-package noop
+package main
 
 import (
 	"github.com/evacchi/envoy-ext-server/pluginapi"
+	"github.com/evacchi/envoy-ext-server/plugins/trivial"
 )
 
-type noop struct {
-	pluginapi.DefaultPlugin
-}
-
 func New(config pluginapi.FilterConfig) pluginapi.Plugin {
-	return &noop{}
+	return trivial.New(config)
 }

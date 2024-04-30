@@ -1,0 +1,27 @@
+filter_chains:
+  - name: 'first chain'
+    filters:
+      - name: timer
+        type: built-in
+      - name: trivial
+        type: built-in
+      - name: wasm
+        type: built-in
+        config:
+          name: hello
+          path: plugins/wasm/wasm/hello.wasm
+
+  - name: 'second chain'
+    filters:
+      - name: timer
+        type: go-plugin
+        path: plugins/timer/timer.so
+      - name: trivial
+        type: go-plugin
+        path: plugins/trivial/trivial.so
+      - name: wasm
+        type: go-plugin
+        path: plugins/wasm/wasm.so
+        config:
+          name: hello
+          path: plugins/wasm/wasm/hello.wasm

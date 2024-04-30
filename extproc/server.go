@@ -1,44 +1,54 @@
 package extproc
 
 import (
+	"context"
+	"fmt"
+	"github.com/evacchi/envoy-ext-server/pluginapi"
+	"github.com/evacchi/envoy-ext-server/plugins"
+	"google.golang.org/grpc"
 	"log"
 	"net"
-	"os"
-	"os/signal"
 	"strings"
-	"syscall"
-	"time"
-
-	"google.golang.org/grpc"
 
 	epb "github.com/envoyproxy/go-control-plane/envoy/service/ext_proc/v3"
 	hpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
-func Serve(listen string, processor RequestProcessor) {
-	if processor == nil {
-		log.Fatalf("cannot process request stream without `processor`")
+func ServeFromConfig(ctx context.Context, cfgFile string) {
+	config, err := pluginapi.ReadConfig(cfgFile)
+	if err != nil {
+		log.Fatal(err)
 	}
+	proc, err := plugins.NewFilterChainFromConfig(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	listen := config.Listen
+	if listen == "" {
+		listen = "tcp://:50051"
+	}
+	Serve(ctx, listen, proc)
+}
 
+func Serve(ctx context.Context, listen string, plugin pluginapi.Plugin) error {
 	conn := strings.Split(listen, "://")
 	if len(conn) != 2 {
-		log.Fatalf("invalid listen address: %s", listen)
+		return fmt.Errorf("invalid listen address: %s", listen)
 	}
 	lis, err := net.Listen(conn[0], conn[1])
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		return fmt.Errorf("failed to listen: %v", err)
 	}
 
 	sopts := []grpc.ServerOption{grpc.MaxConcurrentStreams(1000)}
 	s := grpc.NewServer(sopts...)
 
-	name := processor.GetName()
-	opts := processor.GetOptions() // TODO: figure out command line overrides
-	extproc := &GenericExtProcServer{
-		name:      name,
-		processor: processor,
-		options:   opts,
+	name := "test"
+	extproc := &ExternalProcessorServer{
+		name:   name,
+		plugin: plugin,
 	}
+
 	epb.RegisterExternalProcessorServer(s, extproc)
 	hpb.RegisterHealthServer(s, &HealthServer{})
 
@@ -46,13 +56,7 @@ func Serve(listen string, processor RequestProcessor) {
 
 	go s.Serve(lis)
 
-	gracefulStop := make(chan os.Signal, 1)
-	signal.Notify(gracefulStop, syscall.SIGTERM)
-	signal.Notify(gracefulStop, syscall.SIGINT)
-	sig := <-gracefulStop
-	log.Printf("caught sig: %+v", sig)
-	log.Println("Wait for 1 second to finish processing")
+	<-ctx.Done()
 	lis.Close()
-
-	time.Sleep(1 * time.Second)
+	return nil
 }

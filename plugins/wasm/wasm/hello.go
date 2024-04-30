@@ -18,7 +18,6 @@ func main() {
 }
 
 func onRequest(reqHeaders map[string]string, reqBody io.Reader) {
-
 	if h, ok := reqHeaders["x-wasm"]; ok {
 		if h == "append" {
 			bytes, err := io.ReadAll(reqBody)

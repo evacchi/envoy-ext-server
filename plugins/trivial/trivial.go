@@ -1,55 +1,38 @@
-package main
+package trivial
 
 import (
-	ep "github.com/evacchi/envoy-ext-server/extproc"
+	"encoding/json"
 	"github.com/evacchi/envoy-ext-server/pluginapi"
+	"log"
 )
 
-func New() pluginapi.Plugin {
-	return &trivialRequestProcessor{}
+type trivial struct {
+	pluginapi.DefaultPlugin
 }
 
-type trivialRequestProcessor struct {
-	opts *ep.ProcessingOptions
+func New(config pluginapi.FilterConfig) pluginapi.Plugin {
+	return &trivial{}
 }
 
-func (s *trivialRequestProcessor) GetName() string {
-	return "trivial"
-}
-
-func (s *trivialRequestProcessor) GetOptions() *ep.ProcessingOptions {
-	return s.opts
-}
-
-func (s *trivialRequestProcessor) ProcessRequestHeaders(ctx *ep.RequestContext, headers ep.AllHeaders) error {
-	ctx.AddHeader("x-extproc-request", ep.HeaderValue{RawValue: []byte("seen")})
-	return ctx.ContinueRequest() // returns an error if response malformed
-}
-
-func (s *trivialRequestProcessor) ProcessRequestBody(ctx *ep.RequestContext, body []byte) error {
-	return ctx.ContinueRequest()
-}
-
-func (s *trivialRequestProcessor) ProcessRequestTrailers(ctx *ep.RequestContext, trailers ep.AllHeaders) error {
-	return ctx.ContinueRequest()
-}
-
-func (s *trivialRequestProcessor) ProcessResponseHeaders(ctx *ep.RequestContext, headers ep.AllHeaders) error {
-	return ctx.ContinueRequest()
-}
-
-func (s *trivialRequestProcessor) ProcessResponseBody(ctx *ep.RequestContext, body []byte) error {
-	ctx.AddHeader("x-extproc-response", ep.HeaderValue{RawValue: []byte("seen")})
-	return ctx.ContinueRequest() // returns an error if response malformed
-}
-
-func (s *trivialRequestProcessor) ProcessResponseTrailers(ctx *ep.RequestContext, trailers ep.AllHeaders) error {
-	return ctx.ContinueRequest()
-}
-
-func (s *trivialRequestProcessor) Init(opts *ep.ProcessingOptions, nonFlagArgs []string, config pluginapi.FilterConfig) error {
-	s.opts = opts
+func (t *trivial) OnRequestHeaders(req pluginapi.RequestContext) error {
+	doProcess := req.Headers().Get("x-trivial-process")
+	if string(doProcess.Value) == "yes" {
+		req.Headers().SetRaw("x-custom-header", []byte("hello from the trivial plugin"))
+	}
 	return nil
 }
 
-func (s *trivialRequestProcessor) Finish() {}
+func (t *trivial) OnRequestBody(req pluginapi.RequestContext) error {
+	kv := map[string]string{}
+	err := json.Unmarshal(req.Body().Get(), &kv)
+	if err != nil {
+		log.Fatal(err)
+	}
+	kv["message"] = "hello from trivial plugin"
+	r, err := json.Marshal(kv)
+	if err != nil {
+		log.Fatal(err)
+	}
+	req.Body().Set(r)
+	return nil
+}

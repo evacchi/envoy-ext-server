@@ -12,10 +12,10 @@ tidy:
     go mod tidy
 
 format:
-    go fmt *.go
+    go fmt ./...
 
-unit-test: 
-    echo "TBD"
+test:
+    go test ./...
 
 integration-test: 
     echo "TBD"
@@ -28,18 +28,13 @@ run example="noop" *flags="":
 
 build *flags="":
     go build {{flags}}
-    cd plugins/data    && go build -buildmode=plugin
-    cd plugins/dedup   && go build -buildmode=plugin
-    cd plugins/digest  && go build -buildmode=plugin
-    cd plugins/echo    && go build -buildmode=plugin
-    cd plugins/masker  && go build -buildmode=plugin
-    cd plugins/noop    && go build -buildmode=plugin
-    cd plugins/timer   && go build -buildmode=plugin
-    cd plugins/trivial && go build -buildmode=plugin
-    cd plugins/wasm    && go build -buildmode=plugin
+    cd plugins/noop/goplugin     && go build -buildmode=plugin
+    cd plugins/timer/goplugin    && go build -buildmode=plugin
+    cd plugins/trivial/goplugin  && go build -buildmode=plugin
+    cd plugins/wasm/goplugin     && go build -buildmode=plugin
 
 clean:
-    rm plugins/**/*.so
+    rm plugins/**/goplugin/*.so
 
 containerize tag=image_tag *flags="": 
     docker build . -t {{image_name}}:{{tag}} {{flags}}

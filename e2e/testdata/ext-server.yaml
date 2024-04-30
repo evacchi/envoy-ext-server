@@ -1,0 +1,11 @@
+filter_chains:
+  - filters:
+      - name: timer
+        type: built-in
+      - name: trivial
+        type: built-in
+      - name: wasm
+        type: built-in
+        config:
+          name: hello
+          path: ../plugins/wasm/wasm/hello.wasm
